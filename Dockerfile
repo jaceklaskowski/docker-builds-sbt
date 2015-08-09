@@ -1,29 +1,31 @@
-# Image to build sbt inside a Docker container
-# https://github.com/sbt/sbt/blob/0.13/CONTRIBUTING.md#build-from-source
+# sbt on OpenJDK 6
+#
+# Image to build sbt inside a Docker container as described in https://github.com/sbt/sbt/blob/0.13/CONTRIBUTING.md#build-from-source
+#
+# URL: https://github.com/jaceklaskowski/docker-builds-sbt
+#
+# If you're reading this and have any feedback on how this image could be improved,
+# please open an issue or a pull request so we can discuss it!
 
-FROM java:6
-MAINTAINER Jacek Laskowski <jacek@japila.pl>
+FROM jaceklaskowski/docker-sbt-openjdk-6:0.13.8
+MAINTAINER Jacek Laskowski jacek@japila.pl
 
-LABEL Description="This image is used to build sbt from the sources" Vendor="Japila Software" Version="1.0"
+ENV SBT_DEV_VERSION 0.13.10
+ENV BUILD_PATH      /tmp
+ENV SBT_SCRIPT      $BUILD_PATH/sbt
+ENV SBT_JAR_PATH    /root/.ivy2/local/org.scala-sbt/sbt-launch/$SBT_DEV_VERSION-SNAPSHOT/jars/sbt-launch.jar
 
-ENV SBT_VERSION 0.13.8
-ENV BUILD_PATH /tmp
-ENV SBT_SCRIPT $BUILD_PATH/sbt.sh
-
-RUN curl -Lo $BUILD_PATH/sbt-launch.jar https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/$SBT_VERSION/sbt-launch.jar
-
-ADD sbt $SBT_SCRIPT
-RUN chmod +x $SBT_SCRIPT
-
-# Downloads all the necessary dependencies
-RUN $SBT_SCRIPT about
+LABEL description="This image is used to build sbt from the sources" \
+      vendor="Japila Software" \
+      version="$SBT_DEV_VERSION"
 
 WORKDIR $BUILD_PATH
 
-RUN git clone git://github.com/sbt/sbt.git sbt-sources
+# Build the development version
+RUN git clone git://github.com/sbt/sbt.git sbt-sources && \
+  cd sbt-sources && \
+  $SBT_SCRIPT publishLocal && \
+  ls -l $SBT_JAR_PATH && \
+  java -jar $SBT_JAR_PATH about
 
-WORKDIR sbt-sources
-
-RUN $SBT_SCRIPT publishLocal
-
-CMD ["/bin/bash"]
+CMD java -jar ${SBT_JAR_PATH}
