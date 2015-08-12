@@ -1,43 +1,30 @@
 Build sbt using Docker
-==
+==========
 
-The project contains a **Dockerfile** to build the latest, development version of [sbt](http://www.scala-sbt.org/) inside a [Docker](https://www.docker.com/) container.
+[![DockerPulls](https://img.shields.io/docker/pulls/jaceklaskowski/docker-builds-sbt.svg)](https://hub.docker.com/r/jaceklaskowski/docker-builds-sbt/)
+[![DockerStars](https://img.shields.io/docker/stars/jaceklaskowski/docker-builds-sbt.svg)](https://hub.docker.com/r/jaceklaskowski/docker-builds-sbt/)
+
+The project contains a **Dockerfile** to build the latest, development version of [sbt](http://www.scala-sbt.org/) inside a [Docker](https://www.docker.com/) container. You can then use the image to work with your Scala projects using the version of sbt (without polluting your local development environment).
 
 The aim of the project is to have reproducible builds of sbt without relying on proper *shared* directories like `~/.sbt/0.13` or `~/.ivy2` (that might get stalled after previous builds or similar cases).
+
+Once built, the image can serve as a testing development environment before switching to the version of sbt in your projects. Work with the latest sbt in your projects using the image until you're ready to do the permanent switch for the entire team.
 
 ## Dependencies
 
 * [jaceklaskowski/docker-sbt-openjdk-6:0.13.8](https://hub.docker.com/r/jaceklaskowski/docker-sbt-openjdk-6/)
 
-## Installation
-
-Latest version:
+## Installation (aka Pulling image from Docker Hub)
 
     $ docker pull jaceklaskowski/docker-builds-sbt:0.13.10
 
-## Run `sbt` REPL
+## Runing `sbt` REPL with your project
 
-    $ docker run -it --rm jaceklaskowski/docker-builds-sbt:0.13.10 java -jar ~/
+    $ docker run -v $(pwd):/tmp/scala-project -it --rm jaceklaskowski/docker-builds-sbt:0.13.10
 
-## Build the image (on MacOS)
+where `$(pwd)` resolves to your current working directory with the Scala/sbt project of yours.
 
-1. `boot2docker up`
-
-        ➜  docker-builds-sbt git:(master) boot2docker up
-        Waiting for VM and Docker daemon to start...
-        ................ooooooooo
-        Started.
-
-        To connect the Docker client to the Docker daemon, please set:
-        unset DOCKER_CERT_PATH
-        unset DOCKER_TLS_VERIFY
-        export DOCKER_HOST=tcp://192.168.59.103:2375
-
-        Or run: `eval "$(boot2docker shellinit)"`
-
-1. `$(boot2docker shellinit)`
-
-        ➜  docker-builds-sbt git:(master) ✗ $(boot2docker shellinit)
+## Building the image
 
 1. `docker build -t docker-builds-sbt:0.13.10 .`
 
@@ -54,10 +41,6 @@ Latest version:
          ---> 9bf5b2f07e31
         Removing intermediate container fa95476bda2c
         Successfully built 9bf5b2f07e31
-
-## Working with a container
-
-1. `docker run -it --rm docker-builds-sbt:0.13.10`
 
 ## Cleanup (to build the image once more)
 

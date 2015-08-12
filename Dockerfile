@@ -14,6 +14,7 @@ ENV SBT_DEV_VERSION 0.13.10
 ENV BUILD_PATH      /tmp
 ENV SBT_SCRIPT      $BUILD_PATH/sbt
 ENV SBT_JAR_PATH    /root/.ivy2/local/org.scala-sbt/sbt-launch/$SBT_DEV_VERSION-SNAPSHOT/jars/sbt-launch.jar
+ENV PROJECT_DIR     /tmp/scala-project
 
 LABEL description="This image is used to build sbt from the sources" \
       vendor="Japila Software" \
@@ -27,5 +28,7 @@ RUN git clone git://github.com/sbt/sbt.git sbt-sources && \
   $SBT_SCRIPT publishLocal && \
   ls -l $SBT_JAR_PATH && \
   java -jar $SBT_JAR_PATH about
+
+WORKDIR $PROJECT_DIR
 
 CMD java -jar ${SBT_JAR_PATH}
