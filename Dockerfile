@@ -7,14 +7,15 @@
 # If you're reading this and have any feedback on how this image could be improved,
 # please open an issue or a pull request so we can discuss it!
 
-FROM jaceklaskowski/docker-sbt-openjdk-6:0.13.8
-MAINTAINER Jacek Laskowski jacek@japila.pl
+FROM jaceklaskowski/docker-sbt-openjdk-6:0.13.9
+MAINTAINER Jacek Laskowski <jacek@japila.pl>
 
 ENV SBT_DEV_VERSION 0.13.10
 ENV BUILD_PATH      /tmp
+ENV SBT_SOURCES     sbt-sources
 ENV SBT_SCRIPT      $BUILD_PATH/sbt
 ENV SBT_JAR_PATH    /root/.ivy2/local/org.scala-sbt/sbt-launch/$SBT_DEV_VERSION-SNAPSHOT/jars/sbt-launch.jar
-ENV PROJECT_DIR     /tmp/scala-project
+ENV PROJECT_DIR     /scala-project
 
 LABEL description="This image is used to build sbt from the sources" \
       vendor="Japila Software" \
@@ -23,12 +24,15 @@ LABEL description="This image is used to build sbt from the sources" \
 WORKDIR $BUILD_PATH
 
 # Build the development version
-RUN git clone git://github.com/sbt/sbt.git sbt-sources && \
-  cd sbt-sources && \
+RUN git clone git://github.com/sbt/sbt.git $SBT_SOURCES && \
+  cd $SBT_SOURCES && \
   $SBT_SCRIPT publishLocal && \
   ls -l $SBT_JAR_PATH && \
+  mkdir $PROJECT_DIR && \
+  cd $PROJECT_DIR && \
   java -jar $SBT_JAR_PATH about
 
 WORKDIR $PROJECT_DIR
 
-CMD java -jar ${SBT_JAR_PATH}
+ENTRYPOINT java -jar ${SBT_JAR_PATH}
+CMD ["help"]
