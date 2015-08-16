@@ -1,8 +1,12 @@
-Build sbt using Docker
-==========
+![sbt-dockerd](sbt-dockerd.png)
 
-[![DockerPulls](https://img.shields.io/docker/pulls/jaceklaskowski/docker-builds-sbt.svg)](https://hub.docker.com/r/jaceklaskowski/docker-builds-sbt/)
-[![DockerStars](https://img.shields.io/docker/stars/jaceklaskowski/docker-builds-sbt.svg)](https://hub.docker.com/r/jaceklaskowski/docker-builds-sbt/)
+# Build and use sbt using Docker
+
+[![DockerPulls](https://img.shields.io/docker/pulls/jaceklaskowski/docker-builds-sbt.svg)](https://hub.docker.com/r/jaceklaskowski/docker-builds-sbt/) [![DockerStars](https://img.shields.io/docker/stars/jaceklaskowski/docker-builds-sbt.svg)](https://hub.docker.com/r/jaceklaskowski/docker-builds-sbt/)
+
+> *sbt-dockerd* is an Docker image to build the latest, development version of sbt.
+
+## Introduction
 
 This image contains the latest, development version of [sbt](http://www.scala-sbt.org/) aka **sbt 0.13.10-SNAPSHOT**. For more information on sbt, see [the official sbt site](http://www.scala-sbt.org/).
 
@@ -13,6 +17,10 @@ Please note that since the image can obviously be a couple of days lagging after
 The aim of the project is showcase how to have reproducible builds of sbt without relying on proper *shared* directories like `~/.sbt/0.13` or `~/.ivy2` (that might get stalled after previous builds or similar cases).
 
 Once built, the image can serve as a testing development environment before switching to the version of sbt in your projects. Work with the latest sbt in your projects using the image until you're ready to do the permanent switch for the entire team.
+
+## Prerequisites
+
+  - A running [Docker](https://www.docker.com/) environment
 
 ## Usage
 
