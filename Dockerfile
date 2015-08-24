@@ -17,6 +17,7 @@ ENV SBT_SCRIPT      $BUILD_PATH/sbt
 ENV SBT_JAR_PATH    /root/.ivy2/local/org.scala-sbt/sbt-launch/$SBT_DEV_VERSION-SNAPSHOT/jars/sbt-launch.jar
 ENV PROJECT_DIR     /scala-project
 ENV JAVA_HOME       /usr/lib/jvm/java-8-oracle
+ENV JAVA_OPTS       "-Xms512M -Xmx1g -Xss1M -XX:+CMSClassUnloadingEnabled -Dfile.encoding=UTF-8 -XX:+UseCompressedOops -XX:NewRatio=9 -XX:ReservedCodeCacheSize=100m"
 
 LABEL description="This image is used to build sbt $SBT_DEV_VERSION from the sources" \
       vendor="Japila Software" \
@@ -50,5 +51,5 @@ RUN echo 'deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' >> /
     rm -rf /var/lib/apt/lists && \
     rm -rf /var/cache/oracle-jdk8-installer
 
-ENTRYPOINT $JAVA_HOME/bin/java -jar ${SBT_JAR_PATH}
+ENTRYPOINT $JAVA_HOME/bin/java $JAVA_OPTS -jar $SBT_JAR_PATH
 CMD ["help"]
