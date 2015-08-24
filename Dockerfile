@@ -16,10 +16,13 @@ ENV SBT_SOURCES     sbt-sources
 ENV SBT_SCRIPT      $BUILD_PATH/sbt
 ENV SBT_JAR_PATH    /root/.ivy2/local/org.scala-sbt/sbt-launch/$SBT_DEV_VERSION-SNAPSHOT/jars/sbt-launch.jar
 ENV PROJECT_DIR     /scala-project
+ENV JAVA_HOME       /usr/lib/jvm/java-8-oracle
 
-LABEL description="This image is used to build sbt from the sources" \
+LABEL description="This image is used to build sbt $SBT_DEV_VERSION from the sources" \
       vendor="Japila Software" \
       version="$SBT_DEV_VERSION"
+
+VOLUME $PROJECT_DIR
 
 WORKDIR $BUILD_PATH
 
@@ -28,11 +31,24 @@ RUN git clone git://github.com/sbt/sbt.git $SBT_SOURCES && \
   cd $SBT_SOURCES && \
   $SBT_SCRIPT publishLocal && \
   ls -l $SBT_JAR_PATH && \
-  mkdir $PROJECT_DIR && \
-  cd $PROJECT_DIR && \
-  java -jar $SBT_JAR_PATH about
+  cd .. && rm -rf $SBT_SOURCES
 
 WORKDIR $PROJECT_DIR
 
-ENTRYPOINT java -jar ${SBT_JAR_PATH}
+# Using Java 6
+RUN java -jar $SBT_JAR_PATH about
+
+# Install Oracle Java 8
+# Copied shamelessly from https://hub.docker.com/r/cloudesire/java/~/dockerfile/
+RUN echo 'deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' >> /etc/apt/sources.list && \
+    echo 'deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' >> /etc/apt/sources.list && \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C2518248EEA14886 && \
+    apt-get update && \
+    echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
+    apt-get install -y --force-yes --no-install-recommends oracle-java8-installer oracle-java8-set-default oracle-java8-unlimited-jce-policy && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists && \
+    rm -rf /var/cache/oracle-jdk8-installer
+
+ENTRYPOINT $JAVA_HOME/bin/java -jar ${SBT_JAR_PATH}
 CMD ["help"]

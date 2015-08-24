@@ -8,7 +8,9 @@
 
 ## Introduction
 
-This image contains the latest, development version of [sbt](http://www.scala-sbt.org/) aka **sbt 0.13.10-SNAPSHOT**. For more information on sbt, see [the official sbt site](http://www.scala-sbt.org/).
+This image contains the latest, development version of [sbt](http://www.scala-sbt.org/) aka **sbt 0.13.10-SNAPSHOT** with **Oracle JDK** (Java SE Development Kit **8u60**) installed via [webupd8team PPA](https://launchpad.net/~webupd8team/+archive/ubuntu/java) and `$JAVA_HOME` set system-wide (borrowed from [cloudesire/java](https://hub.docker.com/r/cloudesire/java/)).
+
+For more information on sbt, see [the official sbt site](http://www.scala-sbt.org/).
 
 You can use the image to work with your Scala projects using the "latest" version of sbt (without anything to install but Docker alone).
 
@@ -39,6 +41,8 @@ where `$(pwd)` resolves to your current working directory with the Scala/sbt pro
     [info] Available Plugins: sbt.plugins.IvyPlugin, sbt.plugins.JvmPlugin, sbt.plugins.CorePlugin, sbt.plugins.JUnitXmlReportPlugin
     [info] sbt, sbt plugins, and build definitions are using Scala 2.10.5
 
+**Mac OS X users**: Please read [Mount a host directory as a data volume](https://docs.docker.com/userguide/dockervolumes/#mount-a-host-directory-as-a-data-volume) where it talks about auto-sharing `/Users` directory and so you have to use `$(pwd)` (not `.`).
+
 ## Building the image (with the very latest sources of sbt)
 
 Execute `docker build` command to build the image on your own Docker host. Since a part of the build process is to pull the sbt sources from the repository, the image is as fresh as it could ever be.
@@ -46,6 +50,13 @@ Execute `docker build` command to build the image on your own Docker host. Since
     $ docker build -t docker-builds-sbt:latest .
 
 Execute the command every change in sbt's `0.13` branch.
+
+### Running Docker host on Mac OS
+
+1. Create a new Docker machine using [Docker Machine](https://docs.docker.com/machine/), i.e. `docker-machine create` command.
+1. Execute `docker-machine start dev` to start the Docker host.
+1. `eval "$(docker-machine env dev)"` to have the command line set up.
+1. Execute `docker ps` to verify the setup. It should return an empty list of containers.
 
 ## Contribution policy
 
