@@ -1,8 +1,8 @@
-![sbt-dockerd](sbt-dockerd.png)
+![sbt-dockerd](https://raw.githubusercontent.com/jaceklaskowski/docker-builds-sbt/master/logo.png)
 
-# Build and use sbt using Docker
+# Using sbt inside Docker
 
-[![DockerPulls](https://img.shields.io/docker/pulls/jaceklaskowski/docker-builds-sbt.svg)](https://hub.docker.com/r/jaceklaskowski/docker-builds-sbt/) [![DockerStars](https://img.shields.io/docker/stars/jaceklaskowski/docker-builds-sbt.svg)](https://hub.docker.com/r/jaceklaskowski/docker-builds-sbt/)
+[![DockerPulls](https://img.shields.io/docker/pulls/jaceklaskowski/docker-builds-sbt.svg)](https://hub.docker.com/r/jaceklaskowski/docker-builds-sbt/) [![DockerStars](https://img.shields.io/docker/stars/jaceklaskowski/docker-builds-sbt.svg)](https://hub.docker.com/r/jaceklaskowski/docker-builds-sbt/) [![](https://badge.imagelayers.io/jaceklaskowski/docker-builds-sbt:latest.svg)](https://imagelayers.io/?images=jaceklaskowski/docker-builds-sbt:latest 'Get your own badge on imagelayers.io')
 
 > *sbt-dockerd* is an Docker image to build the latest, development version of sbt.
 
